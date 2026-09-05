@@ -13,7 +13,7 @@ public record ProfileResponse(
         List<ExperienceDto> experiences,
         List<EducationDto> educations,
         List<SkillDto> skills,
-        long connectionsCount,
+        Long connectionsCount,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
