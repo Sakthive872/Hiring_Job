@@ -1,0 +1,7 @@
+# This project intentionally ignores generated build artifacts and IDE metadata.
+/target/
+.idea/
+.vscode/
+*.iml
+*.class
+*.log
