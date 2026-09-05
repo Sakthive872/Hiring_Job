@@ -1,5 +1,26 @@
 # React + Vite
 
+## Run With MySQL
+
+The frontend uses `http://localhost:8080` by default. Start the backend with
+the MySQL profile after creating the `hiring` database:
+
+```powershell
+$env:SPRING_PROFILES_ACTIVE = 'mysql'
+$env:DB_USERNAME = 'root'
+$env:DB_PASSWORD = '<your-mysql-password>'
+Set-Location backend
+mvn spring-boot:run
+```
+
+The supplied SQL schema must match the backend JPA schema before using
+`DDL_AUTO=validate`. The current backend expects `users.password`,
+`users.username`, and a `user_roles` table; the pasted schema uses
+`password_hash`, no username column, and a single `role` column. Do not run
+the application against that schema unchanged. Use the backend migration in
+`src/main/resources/db/migration/V1__init_schema.sql`, or migrate those
+columns and tables first.
+
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
 Currently, two official plugins are available:
