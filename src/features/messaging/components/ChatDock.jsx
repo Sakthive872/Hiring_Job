@@ -44,7 +44,29 @@ export default function ChatDock() {
     const controller = new AbortController();
     axiosClient
       .get(endpoints.messages.threads, { signal: controller.signal })
-      .then(({ data }) => dispatch(setConversations(data?.items || data || [])))
+      .then(({ data }) => {
+        const payload = data?.data ?? data;
+        const conversations = Array.isArray(payload)
+          ? payload
+          : payload?.items || [];
+        dispatch(
+          setConversations(
+            conversations.map((conversation) => ({
+              ...conversation,
+              participant: conversation.participant || {
+                id: conversation.participantId,
+                name: conversation.participantName,
+              },
+              lastMessage: conversation.lastMessage
+                ? {
+                    content: conversation.lastMessage,
+                    createdAt: conversation.updatedAt,
+                  }
+                : null,
+            })),
+          ),
+        );
+      })
       .catch((requestError) => {
         if (
           requestError.name !== 'CanceledError' &&

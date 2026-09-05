@@ -40,9 +40,9 @@ const endpoints = {
     like: (postId) => `/feed/posts/${encodeURIComponent(postId)}/like`,
   },
   messages: {
-    threads: '/messages/threads',
-    messages: (threadId) =>
-      `/messages/threads/${encodeURIComponent(threadId)}/messages`,
+    threads: '/messages/conversations',
+    messages: (conversationId) =>
+      `/messages/conversations/${encodeURIComponent(conversationId)}`,
   },
   notifications: {
     list: '/notifications',
