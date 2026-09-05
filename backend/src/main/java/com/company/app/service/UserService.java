@@ -113,7 +113,7 @@ public class UserService implements UserDetailsService {
     public UserResponse mapUser(User user) {
         return new UserResponse(
                 user.getId(),
-                user.getUsername(),
+                user.getAccountUsername(),
                 user.getEmail(),
                 user.getRoles(),
                 user.isEnabled(),

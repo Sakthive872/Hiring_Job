@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Locale;
 import java.util.Set;
 
 @Service
@@ -33,16 +34,19 @@ public class AuthService {
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
-        if (userRepository.existsByEmail(request.email())) {
+        String email = request.email().trim().toLowerCase(Locale.ROOT);
+        String username = request.username().trim();
+
+        if (userRepository.existsByEmail(email)) {
             throw new DuplicateResourceException("Email already registered");
         }
-        if (userRepository.existsByUsername(request.username())) {
+        if (userRepository.existsByUsername(username)) {
             throw new DuplicateResourceException("Username already taken");
         }
 
         User user = User.builder()
-                .email(request.email())
-                .username(request.username())
+                .email(email)
+                .username(username)
                 .password(passwordEncoder.encode(request.password()))
                 .roles(resolveRole(request.role()))
                 .enabled(true)

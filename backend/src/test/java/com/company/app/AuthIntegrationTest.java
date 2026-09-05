@@ -51,6 +51,24 @@ class AuthIntegrationTest {
         assertTrue(userRepository.findByEmail("alice@example.com").isPresent());
     }
 
+        @Test
+        void register_shouldAcceptNameAliasAndPersistAccount() throws Exception {
+                String json = "{\"name\":\"name-alias-user\",\"email\":\"NAME.ALIAS@EXAMPLE.COM\",\"password\":\"secret123\",\"role\":\"candidate\"}";
+
+                HttpRequest httpRequest = HttpRequest.newBuilder()
+                                .uri(URI.create("http://localhost:" + port + "/api/v1/auth/register"))
+                                .header("Content-Type", "application/json")
+                                .POST(HttpRequest.BodyPublishers.ofString(json))
+                                .build();
+
+                HttpResponse<String> response = HttpClient.newHttpClient()
+                                .send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+                assertEquals(200, response.statusCode());
+                assertTrue(userRepository.findByEmail("name.alias@example.com").isPresent());
+                assertEquals("name-alias-user", userRepository.findByEmail("name.alias@example.com").orElseThrow().getAccountUsername());
+        }
+
     @Test
     void profileUpdate_shouldPersistChangesInDatabase() throws Exception {
         String email = "profile.user@example.com";
