@@ -35,7 +35,7 @@ const getMessage = (error, fallback) => {
 
   if (
     error.response?.status === 401 ||
-    /invalid|incorrect|credential|password|user not found|email not found/i.test(
+    /invalid|incorrect|credential|password|user not found|email not found|unexpected server error/i.test(
       message || '',
     )
   ) {
