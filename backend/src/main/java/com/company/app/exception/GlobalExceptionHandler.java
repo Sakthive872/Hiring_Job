@@ -4,6 +4,7 @@ import com.company.app.dto.common.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -33,6 +34,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ApiResponse<Void>> handleUnauthorized(UnauthorizedException ex) {
         return build(HttpStatus.UNAUTHORIZED, ex.getMessage(), "UNAUTHORIZED");
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAuthenticationFailure(AuthenticationException ex) {
+        return build(HttpStatus.UNAUTHORIZED, "ID or password is incorrect.", "INVALID_CREDENTIALS");
     }
 
     @ExceptionHandler(BusinessRuleException.class)

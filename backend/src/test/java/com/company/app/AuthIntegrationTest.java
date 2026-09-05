@@ -117,6 +117,23 @@ class AuthIntegrationTest {
         assertEquals(401, response.statusCode());
     }
 
+        @Test
+        void login_withUnknownAccount_shouldReturnUnauthorized() throws Exception {
+                String json = "{\"email\":\"missing@example.com\",\"password\":\"wrongpass\"}";
+
+                HttpRequest httpRequest = HttpRequest.newBuilder()
+                                .uri(URI.create("http://localhost:" + port + "/api/v1/auth/login"))
+                                .header("Content-Type", "application/json")
+                                .POST(HttpRequest.BodyPublishers.ofString(json))
+                                .build();
+
+                HttpResponse<String> response = HttpClient.newHttpClient()
+                                .send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+                assertEquals(401, response.statusCode());
+                assertTrue(response.body().contains("ID or password is incorrect."));
+        }
+
     @Test
     void preflightRequest_shouldIncludeCorsHeadersForFrontend() throws Exception {
         HttpRequest httpRequest = HttpRequest.newBuilder()
